@@ -10,9 +10,10 @@ function ShoppingList(props) {
 
 const styles = StyleSheet.create({
     listContainer:{
-        backgroundColor: 'purple',
+        backgroundColor: '#121212' ,
         width: '100%',
-        height: '100%'
+        height: '100%',
+        borderRadius: 10
     }
 })
 
