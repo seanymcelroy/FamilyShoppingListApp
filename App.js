@@ -10,6 +10,10 @@ import { FontAwesome5 } from '@expo/vector-icons';
 
 export default function App() {
   const [emptyModal, setOpenModal] = useState(false)
+  const mitems=[{name: 'bread', check: false},
+  {name: 'Supervalu Popcorn', check: false},
+  {name: 'toast', check: true},
+  {name: 'poptart', check: false}]
   return (
     <View style={styles.container}>
       <Modal 
@@ -19,14 +23,14 @@ export default function App() {
       >
         <View style={styles.modalstyl}>
           <FontAwesome5 onPress={()=>setOpenModal(false)} name="backspace" size={60} color="white" style={styles.backbtn} />
-          <Text  style={styles.modalText}>This will permanantely delete everything</Text>
+          <Text  style={styles.modalText}>This will permanantely delete checked items</Text>
           <Ionicons name="trash-bin" size={150} color="red" />
         </View>
       </Modal>
       <Text style={styles.heading}>McElroy Shopping List</Text>
       <AddItemComp/>
       <View style={styles.shopListContainer}>
-        <ShoppingList/>
+        <ShoppingList items={mitems}/>
       </View>
       <StatusBar style="auto" />
       <EmptyListCom passedStyle={styles.emptyListBTN} openModal={openCloseModal}/>
