@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Platform, FlatList} from 'react-native';
+import { StyleSheet, Text, View, Platform, FlatList, TouchableHighlight, TouchableOpacity} from 'react-native';
 
 function ShoppingList({items}) {
     return (
@@ -7,11 +7,13 @@ function ShoppingList({items}) {
             <FlatList
                 data={items}
                 renderItem={({item})=>(
-                    <View style={styles.listItem}>
-                        <Text style={!item.check? styles.itemText: styles.strikethrough}>{item.name}</Text>
-                    </View>
+                    <TouchableHighlight onPress={()=>console.log("hi")}>
+                        <View style={styles.listItem}>
+                            <Text style={!item.check? styles.itemText: styles.strikethrough}>{item.name}</Text>
+                        </View>
+                    </TouchableHighlight>
                 )}
-                
+                ItemSeparatorComponent={()=> <View style={{width: '100%', height: 3, backgroundColor: '#636363'}}/>}
             />
         </View>
     );
@@ -29,13 +31,12 @@ const styles = StyleSheet.create({
     },
     itemText:{
         color: 'white',
-        fontSize: 36,
-        fontWeight: 'bold',
+        fontSize: 32,
         textTransform: 'capitalize'
     },
     strikethrough:{
         color: '#8aab90',
-        fontSize: 36,
+        fontSize: 32,
         textTransform: 'capitalize',
         textDecorationLine: 'line-through', 
         

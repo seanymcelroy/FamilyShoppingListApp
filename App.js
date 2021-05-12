@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import React, {useState} from 'react';
-import { StyleSheet, Text, View, Platform, Modal} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import { StyleSheet, Text, View, Platform, Modal, TouchableOpacity} from 'react-native';
 import ShoppingList from './components/ShoppingList'
 import AddItemComp from './components/AddItemCom'
 import EmptyListCom from './components/EmptyListCom'
@@ -10,27 +10,35 @@ import { FontAwesome5 } from '@expo/vector-icons';
 
 export default function App() {
   const [emptyModal, setOpenModal] = useState(false)
-  const mitems=[{name: 'bread', check: false},
-  {name: 'Supervalu Popcorn', check: false},
+  const [items,setItems]=useState([{name: 'bread', check: false},
+  {name: 'supervalu popcorn', check: false},
   {name: 'toast', check: true},
-  {name: 'poptart', check: false}]
+  {name: 'poptart', check: false}])
+  const [showedItems,setShowingItems]=useState(items)
+  useEffect(() => {
+    const list=alphabetizeList(items)
+    setItems(list)
+  }, [])
+
   return (
     <View style={styles.container}>
       <Modal 
-      animationType="slide"
       visible={emptyModal}
       transparent={true}
       >
         <View style={styles.modalstyl}>
+          
           <FontAwesome5 onPress={()=>setOpenModal(false)} name="backspace" size={60} color="white" style={styles.backbtn} />
           <Text  style={styles.modalText}>This will permanantely delete checked items</Text>
-          <Ionicons name="trash-bin" size={150} color="red" />
+          <TouchableOpacity>
+            <Ionicons name="trash-bin" size={150} color="red" />
+          </TouchableOpacity>
         </View>
       </Modal>
-      <Text style={styles.heading}>McElroy Shopping List</Text>
-      <AddItemComp/>
+      <Text style={styles.heading}>McShopping List</Text>
+      <AddItemComp typeytype={typing}/>
       <View style={styles.shopListContainer}>
-        <ShoppingList items={mitems}/>
+        <ShoppingList items={showedItems}/>
       </View>
       <StatusBar style="auto" />
       <EmptyListCom passedStyle={styles.emptyListBTN} openModal={openCloseModal}/>
@@ -44,6 +52,23 @@ export default function App() {
 
   function emptyList(){
     console.log('emptying list')
+  }
+
+  function alphabetizeList(list){
+    console.log("Alphabetize")
+    list.sort((a,b)=> a.name>b.name? 1: -1)
+    return list
+  }
+
+  function typing(str){
+    console.log("Your word is " + str)
+    str=str.toLowerCase()
+    if (str==="") setShowingItems(items)
+    else{
+      const itm_list=items
+      updated_list=itm_list.filter((item)=> item.name.toLowerCase().startsWith(str))
+      setShowingItems(updated_list)
+    }
   }
 }
 
@@ -63,12 +88,12 @@ const styles = StyleSheet.create({
     color: 'white'
   },
   shopListContainer:{
-    marginTop: 40,
+    marginTop: 50,
     width: '100%',
     height: '60%'
   },
   emptyListBTN:{
-    marginTop: 20,
+    marginTop: 40,
     width: '50%'
   },
   modalView:{

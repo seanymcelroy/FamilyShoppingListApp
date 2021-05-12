@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
-function AddItemComp(props) {
+function AddItemComp({typeytype}) {
+    const [text, onChangeText] = React.useState("")
+    useEffect(()=>{
+        typeytype(text)
+    }, [text])
     return (
         <View style={styles.addContainer}>
             <TextInput style={styles.input}
             placeholder="Type Item"
-            placeholderTextColor="white"/>
+            placeholderTextColor="white"
+            onChangeText={onChangeText}
+            value={text}/>
             <TouchableOpacity>
                 <View style={styles.addBTN}>
                     <Text style={styles.btnText}>Add</Text>
