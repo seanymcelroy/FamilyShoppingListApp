@@ -20,6 +20,8 @@ export default function App() {
     setItems(list)
   }, [])
 
+  const [addDisabled, setAddDisabled]= useState(false)
+
   return (
     <View style={styles.container}>
       <Modal 
@@ -36,7 +38,7 @@ export default function App() {
         </View>
       </Modal>
       <Text style={styles.heading}>McShopping List</Text>
-      <AddItemComp typeytype={typing}/>
+      <AddItemComp typeytype={typing} btndisabled={addDisabled} addItem={addItem}/>
       <View style={styles.shopListContainer}>
         <ShoppingList items={showedItems}/>
       </View>
@@ -54,6 +56,11 @@ export default function App() {
     console.log('emptying list')
   }
 
+  function addItem(food){
+    let nuevo_array=[{name: food.toLowerCase(), check:false},...items]
+    setItems(nuevo_array)
+  }
+
   function alphabetizeList(list){
     console.log("Alphabetize")
     list.sort((a,b)=> a.name>b.name? 1: -1)
@@ -61,13 +68,20 @@ export default function App() {
   }
 
   function typing(str){
-    console.log("Your word is " + str)
     str=str.toLowerCase()
     if (str==="") setShowingItems(items)
     else{
       const itm_list=items
-      updated_list=itm_list.filter((item)=> item.name.toLowerCase().startsWith(str))
+      updated_list=itm_list.filter((item)=> {          
+        return item.name.toLowerCase().startsWith(str)
+      })
+      if (updated_list.length>0 && updated_list[0].name===str){
+        setAddDisabled(true)
+      }else{
+        setAddDisabled(false)
+      }
       setShowingItems(updated_list)
+
     }
   }
 }

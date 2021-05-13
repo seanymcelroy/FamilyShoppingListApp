@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
-function AddItemComp({typeytype}) {
+function AddItemComp({typeytype, btndisabled, addItem}) {
     const [text, onChangeText] = React.useState("")
     useEffect(()=>{
         typeytype(text)
@@ -12,11 +12,19 @@ function AddItemComp({typeytype}) {
             placeholderTextColor="white"
             onChangeText={onChangeText}
             value={text}/>
-            <TouchableOpacity>
+            {!btndisabled && text!=="" && <TouchableOpacity onPress={()=> {
+                onChangeText("")
+                addItem(text)
+            }}>
                 <View style={styles.addBTN}>
                     <Text style={styles.btnText}>Add</Text>
                 </View>
-            </TouchableOpacity>
+            </TouchableOpacity>}
+            {(btndisabled || text==="") && 
+            <View style={styles.cantAddBTN}>
+                <Text style={styles.btnText}>Add</Text>
+            </View>}
+
         </View>
     );
 }
@@ -46,6 +54,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     
+    },
+    cantAddBTN:{
+        width: 100,
+        height: 50,
+        borderRadius: 25,
+        backgroundColor: 'grey',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     btnText:{
         fontFamily: Platform.OS === 'ios' ? 'San Francisco' :'notoserif',
