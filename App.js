@@ -40,7 +40,7 @@ export default function App() {
       <Text style={styles.heading}>McShopping List</Text>
       <AddItemComp typeytype={typing} btndisabled={addDisabled} addItem={addItem}/>
       <View style={styles.shopListContainer}>
-        <ShoppingList items={showedItems}/>
+        <ShoppingList items={showedItems} checkItem={checkItem}/>
       </View>
       <StatusBar style="auto" />
       <EmptyListCom passedStyle={styles.emptyListBTN} openModal={openCloseModal}/>
@@ -54,6 +54,19 @@ export default function App() {
 
   function emptyList(){
     console.log('emptying list')
+  }
+  
+  function checkItem(itm){
+    let eyetems= [...items]
+    for (let i=0; i<eyetems.length;i++){
+      if (eyetems[i].name===itm.name){
+        itm.check=(!itm.check)
+        eyetems[i]=itm
+      }
+    }
+    setItems(eyetems)
+    console.log("hs")
+    
   }
 
   function addItem(food){
