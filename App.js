@@ -22,6 +22,7 @@ export default function App() {
 
   const [addDisabled, setAddDisabled]= useState(false)
 
+
   return (
     <View style={styles.container}>
       <Modal 
@@ -40,7 +41,7 @@ export default function App() {
       <Text style={styles.heading}>McShopping List</Text>
       <AddItemComp typeytype={typing} btndisabled={addDisabled} addItem={addItem}/>
       <View style={styles.shopListContainer}>
-        <ShoppingList items={showedItems} checkItem={checkItem}/>
+        <ShoppingList items={showedItems} checkItem={checkItem} deleteItem={deleteItem} refresh={refresh}/>
       </View>
       <StatusBar style="auto" />
       <EmptyListCom passedStyle={styles.emptyListBTN} openModal={openCloseModal}/>
@@ -48,12 +49,28 @@ export default function App() {
     
   );
 
+  function refresh(){
+    let freshList=alphabetizeList([...showedItems])
+    setShowingItems(freshList)
+  }
+
   function openCloseModal(){
     setOpenModal(true)
   }
 
   function emptyList(){
     console.log('emptying list')
+  }
+
+  function deleteItem(name){
+    console.log(name)
+    let eyetems=[...items]
+    let nuItems= eyetems.filter((item)=>item.name!=name)
+    console.log(nuItems)
+    setItems(nuItems)
+    let eyetems2=[...showedItems]
+    let nuItems2= eyetems2.filter((item)=>item.name!=name)
+    setShowingItems(nuItems2)
   }
   
   function checkItem(itm){
@@ -85,7 +102,7 @@ export default function App() {
     if (str==="") setShowingItems(items)
     else{
       const itm_list=items
-      updated_list=itm_list.filter((item)=> {          
+      let updated_list=itm_list.filter((item)=> {          
         return item.name.toLowerCase().startsWith(str)
       })
       if (updated_list.length>0 && updated_list[0].name===str){
