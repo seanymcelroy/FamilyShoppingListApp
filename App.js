@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, View, Platform, Modal, TouchableOpacity} from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import { StyleSheet, Text, View, Platform, Modal, TouchableOpacity, AppState} from 'react-native';
 import ShoppingList from './components/ShoppingList'
 import AddItemComp from './components/AddItemCom'
 import EmptyListCom from './components/EmptyListCom'
@@ -8,22 +8,37 @@ import { Ionicons } from '@expo/vector-icons'
 import { FontAwesome5 } from '@expo/vector-icons';
 
 
+const socket= new WebSocket('wss://dhp4ikyy28.execute-api.eu-west-1.amazonaws.com/production')
+
+
 export default function App() {
+  
+  socket.addEventListener('message', function (event) {
+    console.log('Message from server ', event.data);
+  });
+
   const [emptyModal, setOpenModal] = useState(false)
   const [items,setItems]=useState([{name: 'bread', check: false},
   {name: 'supervalu popcorn', check: false},
   {name: 'toast', check: true},
   {name: 'poptart', check: false}])
   const [showedItems,setShowingItems]=useState(items)
+
+
   useEffect(() => {
     const list=alphabetizeList(items)
     setItems(list)
+
   }, [])
+
+  
 
   const [addDisabled, setAddDisabled]= useState(false)
 
 
+ 
   return (
+    
     <View style={styles.container}>
       <Modal 
       visible={emptyModal}
@@ -46,8 +61,8 @@ export default function App() {
       <StatusBar style="auto" />
       <EmptyListCom passedStyle={styles.emptyListBTN} openModal={openCloseModal}/>
     </View>
-    
   );
+
 
   function refresh(){
     let freshList=alphabetizeList([...showedItems])
@@ -87,6 +102,8 @@ export default function App() {
   }
 
   function addItem(food){
+  
+    socket.send(JSON.stringify({"action" : "sendShoppingListItem" , "message" : "Hello everyone"}))
     let nuevo_array=[{name: food.toLowerCase(), check:false},...items]
     setItems(nuevo_array)
   }
